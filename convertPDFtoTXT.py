@@ -1,4 +1,5 @@
 import PyPDF2
+#RUN IN Interpreter Python 3.10
 import re
 
 def convert_pdf_to_text(pdf_path, txt_path):
