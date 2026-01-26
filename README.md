@@ -1,54 +1,37 @@
 # Blood Meridian NLP
 
-Train a language model on Cormac McCarthy's *Blood Meridian* to generate prose in his distinctive style.
-
-## Project Status
-
-- [x] Corpus extraction (clean text from PDF)
-- [x] Spanish/English code-switching analysis (legacy)
-- [ ] Data preparation (tokenization)
-- [ ] nanoGPT training
-- [ ] Generation & evaluation
+Char-level language model trained on McCarthy's prose.
 
 ## Corpus
 
-`corpus/blood_meridian.txt` — Clean OCR extraction from Internet Archive (635KB, ~110K tokens)
+`corpus/blood_meridian.txt` — 635KB, ~110K tokens
 
-**McCarthy's style features to capture:**
-- No quotation marks for dialogue
-- Long, unpunctuated sentences with polysyndeton ("and... and... and...")
-- Biblical/archaic diction
-- Spanish code-switching
-- Paratactic structure (clauses joined without subordination)
+See `FINDINGS.md` for stylistic analysis (syllables, polysyndeton, etc).
 
-## Quick Start
+## Usage
 
 ```bash
-# 1. Install dependencies
-pip install torch numpy tiktoken
+pip install numpy pyphen
 
-# 2. Prepare data
-python prepare_data.py
-
-# 3. Train (coming soon)
-python train.py
+python prepare_data.py      # tokenize
+python corpus_analysis.py   # analyze
+python train.py             # train (wip)
 ```
 
 ## Architecture
 
-Using a modified nanoGPT approach:
-- Character-level tokenizer (preserves McCarthy's punctuation style)
-- Small transformer (~10-50M params)
-- Trainable on consumer GPU or M-series Mac
+- Character-level (preserves McCarthy's punctuation)
+- nanoGPT-style transformer
+- ~10-50M params, trainable on M-series Mac
 
-## Legacy Code
+## Key findings
 
-The original project analyzed Spanish/English code-switching in the novel:
-- `EnglishOrSpanish.py` — Naive Bayes classifier for language detection
-- `Blood-Meridian-Spanish-Words-Model.txt` — Extracted Spanish vocabulary
+- 81.6% monosyllables
+- 5.82% "and" (polysyndeton)
+- 0 quotation marks
+- Bimodal sentence length (short punches + long flows)
 
 ## References
 
-- [nanoGPT](https://github.com/karpathy/nanoGPT) — Karpathy's minimal GPT implementation
-- [Let's Build GPT](https://www.youtube.com/watch?v=kCc8FmEb1nY) — 2-hour walkthrough
-- [Attention Is All You Need](https://arxiv.org/abs/1706.03762) — Original transformer paper
+- [nanoGPT](https://github.com/karpathy/nanoGPT)
+- [Let's Build GPT](https://www.youtube.com/watch?v=kCc8FmEb1nY)
