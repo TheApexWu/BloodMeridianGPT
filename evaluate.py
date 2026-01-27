@@ -238,7 +238,15 @@ def generate_and_evaluate(checkpoint_path, num_samples=5, tokens_per_sample=500,
     print(f"Loading checkpoint: {checkpoint_path}")
     ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
     config = ckpt['config']
-    meta = ckpt['meta']
+    
+    # Load meta from checkpoint or fallback to data/meta.pkl
+    if 'meta' in ckpt:
+        meta = ckpt['meta']
+    else:
+        import pickle
+        print("Loading meta from data/meta.pkl...")
+        with open('data/meta.pkl', 'rb') as f:
+            meta = pickle.load(f)
     
     model = McCarthyGPT(config).to(device)
     model.load_state_dict(ckpt['model'])
