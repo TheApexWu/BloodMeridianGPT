@@ -1,0 +1,12 @@
+# Core
+torch>=2.0.0
+numpy
+
+# Web app
+gradio>=4.0.0
+
+# Cloud training (optional)
+modal
+
+# Development
+ipython
