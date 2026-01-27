@@ -99,20 +99,28 @@ def train(
     print(f"Training finished with code: {process.returncode}", flush=True)
     
     # Copy checkpoints to persistent volume
+    checkpoint_to_return = None
+    
+    # Prefer best.pt (early stopping) over final.pt
+    if os.path.exists("checkpoints/best.pt"):
+        shutil.copy2("checkpoints/best.pt", "/checkpoints/best.pt")
+        print("Saved best.pt to volume (early stopping checkpoint)", flush=True)
+        with open("checkpoints/best.pt", "rb") as f:
+            checkpoint_to_return = f.read()
+    
     if os.path.exists("checkpoints/final.pt"):
         shutil.copy2("checkpoints/final.pt", "/checkpoints/final.pt")
         print("Saved final.pt to volume", flush=True)
-        
-        # Also return the checkpoint
-        with open("checkpoints/final.pt", "rb") as f:
-            return f.read()
-    else:
-        print("WARNING: No final.pt found!", flush=True)
-        # Check what's in checkpoints
+        if checkpoint_to_return is None:
+            with open("checkpoints/final.pt", "rb") as f:
+                checkpoint_to_return = f.read()
+    
+    if checkpoint_to_return is None:
+        print("WARNING: No checkpoint found!", flush=True)
         if os.path.exists("checkpoints"):
             print(f"Checkpoints dir contents: {os.listdir('checkpoints')}", flush=True)
     
-    return None
+    return checkpoint_to_return
 
 
 @app.function(
@@ -133,7 +141,14 @@ def generate(model_code: str, prompt: str = "", tokens: int = 500, temperature: 
     with open("model.py", "w") as f:
         f.write(model_code)
     
-    if not os.path.exists("/checkpoints/final.pt"):
+    # Prefer best.pt over final.pt
+    ckpt_path = None
+    if os.path.exists("/checkpoints/best.pt"):
+        ckpt_path = "/checkpoints/best.pt"
+    elif os.path.exists("/checkpoints/final.pt"):
+        ckpt_path = "/checkpoints/final.pt"
+    
+    if not ckpt_path:
         return "No trained model found! Run training first."
     
     sys.path.insert(0, "/root/BloodMeridianNLP")
@@ -141,7 +156,7 @@ def generate(model_code: str, prompt: str = "", tokens: int = 500, temperature: 
     from model import McCarthyGPT
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    ckpt = torch.load("/checkpoints/final.pt", map_location=device)
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     config = ckpt['config']
     meta = ckpt['meta']
     
@@ -201,9 +216,9 @@ def main():
     if checkpoint:
         # Save checkpoint locally too
         os.makedirs(f"{base}/checkpoints", exist_ok=True)
-        with open(f"{base}/checkpoints/final_modal.pt", "wb") as f:
+        with open(f"{base}/checkpoints/best_modal.pt", "wb") as f:
             f.write(checkpoint)
-        print(f"\nSaved checkpoint to {base}/checkpoints/final_modal.pt")
+        print(f"\nSaved checkpoint to {base}/checkpoints/best_modal.pt")
         
         print("\n" + "=" * 60)
         print("Generating sample...")

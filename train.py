@@ -29,6 +29,10 @@ MIN_LR = 1e-4               # minimum learning rate
 WARMUP_ITERS = 100          # warmup steps
 GRAD_CLIP = 1.0             # gradient clipping (prevents explosions)
 
+# Early stopping
+PATIENCE = 3                # stop after N evals without improvement
+BEST_VAL_LOSS = float('inf')
+
 # Checkpoints
 CKPT_DIR = 'checkpoints'
 SAVE_INTERVAL = 1000        # save checkpoint every N steps
@@ -148,11 +152,14 @@ def train():
     # Checkpoint directory
     os.makedirs(CKPT_DIR, exist_ok=True)
     
-    # Training loop
-    print(f"\nTraining for {MAX_ITERS} steps...")
+    # Training loop with early stopping
+    print(f"\nTraining for {MAX_ITERS} steps (early stopping patience={PATIENCE})...")
     print("-" * 50)
     
     start_time = time.time()
+    best_val_loss = float('inf')
+    patience_counter = 0
+    best_step = 0
     
     for step in range(MAX_ITERS):
         # Evaluate periodically
@@ -163,7 +170,33 @@ def train():
             )
             elapsed = time.time() - start_time
             lr = get_lr(step)
-            print(f"step {step:5d} | train {losses['train']:.4f} | val {losses['val']:.4f} | lr {lr:.2e} | {elapsed:.0f}s")
+            
+            # Check for improvement
+            improved = ""
+            if losses['val'] < best_val_loss:
+                best_val_loss = losses['val']
+                patience_counter = 0
+                best_step = step
+                improved = " ★ best"
+                # Save best model
+                ckpt = {
+                    'model': model.state_dict(),
+                    'optimizer': optimizer.state_dict(),
+                    'step': step,
+                    'config': config,
+                    'val_loss': best_val_loss,
+                }
+                torch.save(ckpt, f'{CKPT_DIR}/best.pt')
+            else:
+                patience_counter += 1
+            
+            print(f"step {step:5d} | train {losses['train']:.4f} | val {losses['val']:.4f} | lr {lr:.2e} | {elapsed:.0f}s{improved}")
+            
+            # Early stopping check
+            if patience_counter >= PATIENCE and step > WARMUP_ITERS:
+                print(f"\n⚠️  Early stopping! No improvement for {PATIENCE} evals.")
+                print(f"   Best val loss: {best_val_loss:.4f} at step {best_step}")
+                break
         
         # Save checkpoint periodically
         if step > 0 and step % SAVE_INTERVAL == 0:
