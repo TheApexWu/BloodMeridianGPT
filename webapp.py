@@ -257,6 +257,8 @@ def index():
 
 @app.route('/generate', methods=['POST'])
 def generate():
+    import re
+    
     data = request.json
     prompt = data.get('prompt', 'The')
     temperature = data.get('temperature', 0.8)
@@ -278,6 +280,12 @@ def generate():
         out = MODEL.generate(x, max_new_tokens=max_tokens, temperature=temperature)
     
     text = ''.join([itos[i] for i in out[0].tolist()])
+    
+    # Clean up spacing artifacts from char-level generation
+    text = re.sub(r'\n+', ' ', text)      # newlines -> spaces
+    text = re.sub(r'  +', ' ', text)      # multiple spaces -> single
+    text = re.sub(r' ([.,;:!?])', r'\1', text)  # no space before punctuation
+    
     return jsonify({'text': text})
 
 
