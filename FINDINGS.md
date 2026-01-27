@@ -270,10 +270,47 @@ McCarthy's palette is dark:
 
 ## Evaluation Metrics (for generated text)
 
-- [ ] Monosyllable percentage (target: ~80%)
-- [ ] "And" frequency (target: ~5.8%)
-- [ ] Sentence length distribution (bimodal)
-- [ ] Quotation mark count (target: 0)
+- [x] Monosyllable percentage (target: ~80%)
+- [x] "And" frequency (target: ~5.8%)
+- [x] Sentence length distribution (bimodal)
+- [x] Quotation mark count (target: 0)
 - [ ] Archaic word presence (sparse but present)
 - [ ] Color vocabulary distribution
 - [ ] Motion phrase frequency
+
+---
+
+## Model Evaluation Results (V1 — 4.81M params)
+
+**Training:** 1250 steps (early stopping), val loss 1.3176
+
+| Metric | Corpus | Generated | Delta | Status |
+|--------|--------|-----------|-------|--------|
+| Monosyllable % | 81.6% | 78.5% | -3.1% | ✓ CLOSE |
+| Avg syllables/word | 1.22 | 1.26 | +0.04 | ✓ CLOSE |
+| "And" frequency | 5.82% | 12.08% | +6.26% | ✗ 2x HIGH |
+| Quotation marks | ~0 | 0 | 0 | ✓ PERFECT |
+| Avg sentence length | 15.7 | 48.0 | +32.3 | ✗ 3x LONG |
+
+### What the Model Learned
+
+✓ Monosyllabic vocabulary — drumbeat rhythm preserved
+✓ No quotation marks — dialogue style intact
+✓ Dark vocabulary — "the", "and", motion verbs
+
+### What the Model Missed
+
+✗ Sentence boundaries — runs on too long
+✗ Polysyndeton balance — overuses "and...and...and"
+✗ Bimodal sentence distribution — no short punchy sentences
+
+### Diagnosis
+
+The model learned McCarthy's *word-level* patterns but not his *sentence-level* rhythm. With 256-char context (~50 words), it can't "see" enough sentence structure to learn when to stop.
+
+### V2 Hypothesis
+
+Increasing context window from 256 → 512 chars should help the model learn:
+- Sentence termination patterns
+- The bimodal short/long sentence rhythm
+- Better "and" frequency calibration
