@@ -1,0 +1,21 @@
+# Data
+data/
+*.bin
+*.pkl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Session notes (personal)
+SESSION_NOTES.md
+
+# OS
+.DS_Store
+
+# Models
+checkpoints/
+*.pt
+*.pth
