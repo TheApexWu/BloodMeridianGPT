@@ -17,7 +17,7 @@ from model import McCarthyGPT, Config
 
 # Data
 DATA_DIR = 'data'
-BLOCK_SIZE = 256            # must match model config
+BLOCK_SIZE = 512            # must match model config (increased from 256)
 
 # Training
 BATCH_SIZE = 64             # sequences per batch

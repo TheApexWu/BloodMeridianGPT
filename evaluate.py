@@ -225,7 +225,7 @@ def print_results(results):
 # GENERATION + EVALUATION
 # =============================================================================
 
-def generate_and_evaluate(checkpoint_path, num_samples=5, tokens_per_sample=500, temperature=0.8):
+def generate_and_evaluate(checkpoint_path, num_samples=5, tokens_per_sample=500, temperature=0.7):
     """
     Load model, generate samples, and evaluate against McCarthy metrics.
     """

@@ -18,12 +18,23 @@ import torch.nn.functional as F
 
 class Config:
     vocab_size: int = 96        # ~94 unique chars in McCarthy corpus + padding
-    block_size: int = 256       # context window (chars model can "see")
-    n_embd: int = 256           # embedding dimension (width of the model)
-    n_head: int = 8             # attention heads (must divide n_embd evenly)
+    block_size: int = 512       # context window (chars model can "see") — increased from 256
+    n_embd: int = 384           # embedding dimension (width of the model) — increased from 256
+    n_head: int = 6             # attention heads (must divide n_embd evenly)
     n_layer: int = 6            # transformer blocks (depth of the model)
-    dropout: float = 0.1        # regularization
+    dropout: float = 0.15       # regularization — increased slightly to combat overfitting
     bias: bool = False          # no bias in linear layers (slightly cleaner)
+
+
+class ConfigV1:
+    """Original config for comparison."""
+    vocab_size: int = 96
+    block_size: int = 256
+    n_embd: int = 256
+    n_head: int = 8
+    n_layer: int = 6
+    dropout: float = 0.1
+    bias: bool = False
 
 # =============================================================================
 # COMPONENTS

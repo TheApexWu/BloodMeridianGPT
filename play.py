@@ -29,7 +29,7 @@ def load_model(checkpoint_path="checkpoints/final_modal.pt"):
     return model, meta, device
 
 
-def generate(model, meta, device, prompt, max_tokens=500, temperature=0.8):
+def generate(model, meta, device, prompt, max_tokens=500, temperature=0.7, top_k=50):
     """Generate text from a prompt."""
     stoi, itos = meta['stoi'], meta['itos']
     
@@ -41,7 +41,7 @@ def generate(model, meta, device, prompt, max_tokens=500, temperature=0.8):
     x = torch.tensor([tokens], dtype=torch.long, device=device)
     
     with torch.no_grad():
-        out = model.generate(x, max_new_tokens=max_tokens, temperature=temperature)
+        out = model.generate(x, max_new_tokens=max_tokens, temperature=temperature, top_k=top_k)
     
     return ''.join([itos[i] for i in out[0].tolist()])
 
