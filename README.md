@@ -1,6 +1,8 @@
-# 🏜️ McCarthyGPT
+# 🏜️ BloodMeridianNLP (McCarthyGPT)
 
 A character-level GPT trained on Cormac McCarthy's prose style. Generates text with that distinctive sparse, biblical, blood-soaked Western voice.
+
+**Live demo**: [cmcgpt site](https://cmcgpt.vercel.app) · **Repo**: [BloodMeridianNLP](https://github.com/TheApexWu/BloodMeridianNLP)
 
 ## Quick Start
 

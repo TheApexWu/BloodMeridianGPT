@@ -20,7 +20,7 @@ DATA_DIR = 'data'
 BLOCK_SIZE = 512            # must match model config (increased from 256)
 
 # Training
-BATCH_SIZE = 64             # sequences per batch
+BATCH_SIZE = 32             # reduced from 64 for 8GB MPS
 MAX_ITERS = 5000            # total training steps
 EVAL_INTERVAL = 250         # evaluate every N steps
 EVAL_ITERS = 100            # batches to average for eval

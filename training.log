@@ -1,0 +1,9 @@
+Device: mps
+Loading data...
+Train: 571,476 | Val: 63,498 | Vocab: 94
+Creating model...
+McCarthyGPT: 10.86M parameters
+
+Training for 5000 steps (early stopping patience=3)...
+--------------------------------------------------
+step     0 | train 4.6001 | val 4.6013 | lr 0.00e+00 | 70s ★ best
