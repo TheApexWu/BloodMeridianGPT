@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏜️ McCarthyGPT — Cormac McCarthy Text Generator</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            color: #c9a959;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            color: #888;
+            font-style: italic;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .quote {
+            background: #2a2a2a;
+            border-left: 4px solid #c9a959;
+            padding: 20px 25px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #aaa;
+        }
+        
+        .main-section {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: #c9a959;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #c9a959;
+            font-weight: bold;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-family: Georgia, serif;
+            background: #1a1a1a;
+            border: 2px solid #444;
+            color: #e0e0e0;
+            border-radius: 8px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #c9a959;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .control label {
+            font-size: 0.9rem;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin-top: 8px;
+        }
+        
+        .range-value {
+            color: #c9a959;
+            font-weight: bold;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #c9a959 0%, #a68a3a 100%);
+            color: #1a1a1a;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-family: Georgia, serif;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(201, 169, 89, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .output-section {
+            margin-top: 30px;
+        }
+        
+        .output {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 25px;
+            min-height: 200px;
+            white-space: pre-wrap;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        
+        .output.generating {
+            border-color: #c9a959;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .stat {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            color: #c9a959;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .examples {
+            margin-top: 30px;
+        }
+        
+        .example-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .chip {
+            background: #333;
+            border: 1px solid #444;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .chip:hover {
+            background: #444;
+            border-color: #c9a959;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        footer a {
+            color: #c9a959;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .status.demo {
+            background: rgba(201, 169, 89, 0.1);
+            border: 1px solid #c9a959;
+            color: #c9a959;
+        }
+        
+        @media (max-width: 600px) {
+            .controls { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏜️ McCarthyGPT</h1>
+            <p class="subtitle">
+                A character-level language model trained on Cormac McCarthy's prose.
+                Generate text with that sparse, biblical, blood-soaked Western voice.
+            </p>
+        </header>
+        
+        <div class="quote">
+            "Whatever exists, he said. Whatever in creation exists without my knowledge exists without my consent."
+            <br>— Judge Holden, <em>Blood Meridian</em>
+        </div>
+        
+        <div class="main-section">
+            <div class="status demo">
+                🔧 <strong>Demo Mode</strong> — Model inference coming soon. 
+                Currently showing pre-generated samples.
+            </div>
+            
+            <div class="input-group">
+                <label for="prompt">Enter your prompt:</label>
+                <textarea id="prompt" rows="3" placeholder="The judge stood in the doorway..."></textarea>
+            </div>
+            
+            <div class="controls">
+                <div class="control">
+                    <label>Temperature: <span class="range-value" id="temp-value">0.8</span></label>
+                    <input type="range" id="temperature" min="0.1" max="2.0" step="0.1" value="0.8">
+                    <small style="color: #666;">Lower = focused, Higher = creative</small>
+                </div>
+                <div class="control">
+                    <label>Max Length: <span class="range-value" id="length-value">500</span></label>
+                    <input type="range" id="max-length" min="100" max="1000" step="50" value="500">
+                    <small style="color: #666;">Characters to generate</small>
+                </div>
+            </div>
+            
+            <button id="generate-btn" onclick="generate()">Generate</button>
+            
+            <div class="output-section">
+                <label>Generated Text:</label>
+                <div class="output" id="output">
+                    <em style="color: #666;">Your generated text will appear here...</em>
+                </div>
+            </div>
+            
+            <div class="examples">
+                <label>Try these prompts:</label>
+                <div class="example-chips">
+                    <span class="chip" onclick="setPrompt('The judge')">The judge</span>
+                    <span class="chip" onclick="setPrompt('They rode')">They rode</span>
+                    <span class="chip" onclick="setPrompt('The desert')">The desert</span>
+                    <span class="chip" onclick="setPrompt('At dawn')">At dawn</span>
+                    <span class="chip" onclick="setPrompt('The man stood')">The man stood</span>
+                    <span class="chip" onclick="setPrompt('He said nothing')">He said nothing</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">4.81M</div>
+                <div class="stat-label">Parameters</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">512</div>
+                <div class="stat-label">Context Window</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">94</div>
+                <div class="stat-label">Vocabulary (chars)</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Transformer Layers</div>
+            </div>
+        </div>
+        
+        <footer>
+            Built by <a href="https://amadeuswoo.com" target="_blank">@theapexwu</a> | 
+            <a href="https://github.com/theapexwu/BloodMeridianNLP" target="_blank">GitHub</a> |
+            Part of <a href="https://suzerain.dev" target="_blank">Suzerain</a>
+        </footer>
+    </div>
+    
+    <script>
+        // Sample outputs for demo mode
+        const samples = {
+            "The judge": "The judge stood among them like some pale djinn risen from the wastes. His head was enormous and hairless and he spoke in a voice that seemed to come from some deep cistern. They listened. The fire crackled. And in the darkness beyond the light the wolves moved through the rocks like spirits of the dead.",
+            "They rode": "They rode on through the night. The desert stretched before them like a sea of black glass and the stars wheeled overhead in their slow cold turning. No one spoke. The horses plodded forward with their heads down and the riders sat their saddles like dead men.",
+            "The desert": "The desert lay before them like the floor of some ancient sea. Bones of creatures unknown and terrible jutted from the hardpan and the wind moved through them making sounds like the voices of the damned. They rode on.",
+            "At dawn": "At dawn they found the bodies. The buzzards were already at their work and they rose in a black wheeling cloud as the riders approached. The kid dismounted and walked among the dead. They had been scalped every one.",
+            "The man stood": "The man stood in the doorway and watched them come. He was old and his face was like leather cured in the sun. He said nothing. They dismounted and walked toward him through the dust.",
+            "He said nothing": "He said nothing. The others waited. The fire burned low and the shadows moved on the canyon walls like dancers in some ancient and terrible rite. Then he spoke."
+        };
+        
+        // Slider value updates
+        document.getElementById('temperature').addEventListener('input', (e) => {
+            document.getElementById('temp-value').textContent = e.target.value;
+        });
+        
+        document.getElementById('max-length').addEventListener('input', (e) => {
+            document.getElementById('length-value').textContent = e.target.value;
+        });
+        
+        function setPrompt(text) {
+            document.getElementById('prompt').value = text;
+        }
+        
+        function generate() {
+            const prompt = document.getElementById('prompt').value.trim() || 'The';
+            const output = document.getElementById('output');
+            const btn = document.getElementById('generate-btn');
+            
+            // Find matching sample or use default
+            let result = samples[prompt];
+            if (!result) {
+                // Find partial match
+                for (const [key, value] of Object.entries(samples)) {
+                    if (prompt.toLowerCase().includes(key.toLowerCase())) {
+                        result = value;
+                        break;
+                    }
+                }
+            }
+            
+            if (!result) {
+                result = samples['The judge']; // default
+            }
+            
+            // Simulate generation
+            output.classList.add('generating');
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+            output.innerHTML = '<em style="color: #c9a959;">Generating...</em>';
+            
+            setTimeout(() => {
+                output.textContent = prompt + ' ' + result.substring(prompt.length).trim();
+                output.classList.remove('generating');
+                btn.disabled = false;
+                btn.textContent = 'Generate';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

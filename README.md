@@ -42,10 +42,12 @@ BloodMeridianNLP/
 ├── modal_train.py    # Modal cloud training wrapper
 ├── checkpoints/
 │   └── final_modal.pt  # Trained model (57MB)
-└── data/
-    ├── train.bin     # Training data
-    ├── val.bin       # Validation data
-    └── meta.pkl      # Vocabulary
+├── data/
+│   ├── train.bin     # Training data
+│   ├── val.bin       # Validation data
+│   └── meta.pkl      # Vocabulary
+└── site/
+    └── index.html    # Static landing page (cmcgpt.vercel.app)
 ```
 
 ## Usage
