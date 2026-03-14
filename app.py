@@ -15,7 +15,7 @@ For public sharing: python app.py --share
 
 import argparse
 import torch
-from model import McCarthyGPT
+from models.v0.model import McCarthyGPT
 
 # Global model (loaded once)
 MODEL = None

@@ -13,7 +13,7 @@ Then open http://localhost:5000
 
 from flask import Flask, render_template_string, request, jsonify
 import torch
-from model import McCarthyGPT
+from models.v0.model import McCarthyGPT
 
 app = Flask(__name__)
 

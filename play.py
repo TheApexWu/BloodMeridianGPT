@@ -11,7 +11,7 @@ Usage:
 import argparse
 import torch
 import sys
-from model import McCarthyGPT
+from models.v0.model import McCarthyGPT
 
 # Load model once
 def load_model(checkpoint_path="checkpoints/final_modal.pt"):

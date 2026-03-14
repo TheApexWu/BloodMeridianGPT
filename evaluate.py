@@ -229,7 +229,7 @@ def generate_and_evaluate(checkpoint_path, num_samples=5, tokens_per_sample=500,
     """
     Load model, generate samples, and evaluate against McCarthy metrics.
     """
-    from model import McCarthyGPT
+    from models.v0.model import McCarthyGPT
     
     device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     print(f"Device: {device}")

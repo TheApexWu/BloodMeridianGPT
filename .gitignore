@@ -3,6 +3,10 @@ data/
 *.bin
 *.pkl
 
+# Corpus (copyrighted material)
+corpus/
+Blood-Meridian-*
+
 # Python
 __pycache__/
 *.pyc
@@ -19,3 +23,15 @@ SESSION_NOTES.md
 checkpoints/
 *.pt
 *.pth
+*.onnx
+
+# Dead files
+english_dictionary.txt
+spanish_dictionary.txt
+legacy/
+training.log
+*.png
+
+# Vercel
+.vercel
+.env*.local

@@ -6,9 +6,12 @@ Runs on CPU, MPS (Apple Silicon), or CUDA.
 """
 
 import os
+import sys
 import pickle
 import time
 import torch
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from model import McCarthyGPT, Config
 
 # =============================================================================

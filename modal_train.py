@@ -186,7 +186,7 @@ def generate(model_code: str, prompt: str = "", tokens: int = 500, temperature: 
 def main():
     import os
     
-    base = "/Users/amadeuswoo/Documents/GitHub/BloodMeridianNLP"
+    base = os.path.dirname(os.path.abspath(__file__))
     
     print("=" * 60)
     print("McCarthyGPT Training on Modal (T4 GPU)")
@@ -201,9 +201,9 @@ def main():
         val_data = f.read()
     with open(f"{base}/data/meta.pkl", "rb") as f:
         meta_data = f.read()
-    with open(f"{base}/model.py", "r") as f:
+    with open(f"{base}/models/v0/model.py", "r") as f:
         model_code = f.read()
-    with open(f"{base}/train.py", "r") as f:
+    with open(f"{base}/models/v0/train.py", "r") as f:
         train_code = f.read()
     
     print(f"  train.bin: {len(train_data):,} bytes")
