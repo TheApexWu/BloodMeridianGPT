@@ -32,6 +32,18 @@ legacy/
 training.log
 *.png
 
+# Research papers (copyrighted PDFs)
+papers/
+
+# Notebook outputs
+results/
+
+# Reference data (regenerated from NB00)
+data/reference/
+
+# Jupyter
+.ipynb_checkpoints/
+
 # Vercel
 .vercel
 .env*.local
