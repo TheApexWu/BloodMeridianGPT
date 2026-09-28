@@ -353,7 +353,7 @@ if __name__ == '__main__':
 def restore_config(ckpt):
     """Rebuild the config a checkpoint was actually trained with.
 
-    The Jan 2026 checkpoints were trained at 256 dims, 8 heads, 6 layers (commit b33aca2) but pickled
+    The Jan 2026 checkpoints were trained at 256 dims, 8 heads, 6 layers (commit f20c6fc) but pickled
     only vocab_size and block_size. The class defaults were later raised to 384 dims and 6 heads, so a
     bare ckpt["config"] builds the wrong model. Width and depth are read from the weights; the head
     count is the training-time value, which validation loss confirms (8 heads: 2.03, 4 heads: 3.08).
