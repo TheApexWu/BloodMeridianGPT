@@ -3,13 +3,13 @@
 
 import argparse
 import torch
-from models.v0.model import McCarthyGPT
+from models.v0.model import McCarthyGPT, restore_config
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
 
 def load_model(ckpt_path):
     ckpt = torch.load(ckpt_path, map_location=DEVICE)
-    config = ckpt['config']
+    config = restore_config(ckpt)
     meta = ckpt['meta']
     
     model = McCarthyGPT(config).to(DEVICE)

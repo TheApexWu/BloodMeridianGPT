@@ -15,7 +15,7 @@ For public sharing: python app.py --share
 
 import argparse
 import torch
-from models.v0.model import McCarthyGPT
+from models.v0.model import McCarthyGPT, restore_config
 
 # Global model (loaded once)
 MODEL = None
@@ -31,7 +31,7 @@ def load_model(checkpoint_path="checkpoints/final_modal.pt"):
     print(f"Loading McCarthyGPT on {DEVICE}...")
     
     ckpt = torch.load(checkpoint_path, map_location=DEVICE, weights_only=False)
-    config = ckpt['config']
+    config = restore_config(ckpt)
     META = ckpt['meta']
     
     MODEL = McCarthyGPT(config).to(DEVICE)

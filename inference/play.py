@@ -11,7 +11,7 @@ Usage:
 import argparse
 import torch
 import sys
-from models.v0.model import McCarthyGPT
+from models.v0.model import McCarthyGPT, restore_config
 
 # Load model once
 def load_model(checkpoint_path="checkpoints/final_modal.pt"):
@@ -19,7 +19,7 @@ def load_model(checkpoint_path="checkpoints/final_modal.pt"):
     print(f"Loading model on {device}...")
     
     ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
-    config = ckpt['config']
+    config = restore_config(ckpt)
     meta = ckpt['meta']
     
     model = McCarthyGPT(config).to(device)
