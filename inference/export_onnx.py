@@ -7,7 +7,7 @@ import json
 import torch
 import torch.nn as nn
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "models", "v0"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "models", "v0"))
 from model import McCarthyGPT, Config
 
 
