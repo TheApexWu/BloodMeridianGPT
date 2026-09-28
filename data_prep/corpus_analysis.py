@@ -90,7 +90,7 @@ def main():
         compare(args.compare)
         return
     
-    corpus = Path(__file__).parent / "corpus" / "blood_meridian.txt"
+    corpus = Path(__file__).resolve().parent.parent / "corpus" / "blood_meridian.txt"
     if not corpus.exists():
         print(f"not found: {corpus}")
         return

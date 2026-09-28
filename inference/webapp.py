@@ -13,7 +13,7 @@ Then open http://localhost:5000
 
 from flask import Flask, render_template_string, request, jsonify
 import torch
-from models.v0.model import McCarthyGPT
+from models.v0.model import McCarthyGPT, restore_config
 
 app = Flask(__name__)
 
@@ -240,7 +240,7 @@ def load_model(checkpoint_path="checkpoints/final_modal.pt"):
     print(f"Loading McCarthyGPT on {DEVICE}...")
     
     ckpt = torch.load(checkpoint_path, map_location=DEVICE, weights_only=False)
-    config = ckpt['config']
+    config = restore_config(ckpt)
     META = ckpt['meta']
     
     MODEL = McCarthyGPT(config).to(DEVICE)

@@ -2,11 +2,40 @@
 torch>=2.0.0
 numpy
 
+# NLP / Stylometry
+spacy>=3.7.0
+faststylometry
+lexicalrichness
+textstat
+
+# NLG Evaluation
+bert-score
+mauve-text
+sacrebleu
+python-Levenshtein
+
+# LLM APIs
+openai
+anthropic
+google-genai
+ollama
+
+# Visualization
+matplotlib
+seaborn
+umap-learn
+
+# Scientific computing
+scipy
+scikit-learn
+
+# Notebooks
+ipython
+ipywidgets
+tqdm
+
 # Web app
 gradio>=4.0.0
 
 # Cloud training (optional)
 modal
-
-# Development
-ipython

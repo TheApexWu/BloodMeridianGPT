@@ -7,8 +7,8 @@ import json
 import torch
 import torch.nn as nn
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "models", "v0"))
-from model import McCarthyGPT, Config
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "models", "v0"))
+from model import McCarthyGPT, Config, restore_config
 
 
 class McCarthyGPTForExport(nn.Module):
@@ -29,16 +29,8 @@ def main():
 
     print(f"Loading checkpoint: {checkpoint_path}")
     ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
-    config = ckpt["config"]
+    config = restore_config(ckpt)
     meta = ckpt["meta"]
-
-    # Checkpoint was trained with ConfigV1 dims but only saved vocab_size + block_size.
-    # Override to match actual weight shapes.
-    config.n_embd = 256
-    config.n_head = 8
-    config.n_layer = 6
-    config.dropout = 0.1
-    config.bias = False
 
     print(f"Config: vocab_size={config.vocab_size}, block_size={config.block_size}, "
           f"n_embd={config.n_embd}, n_head={config.n_head}, n_layer={config.n_layer}")

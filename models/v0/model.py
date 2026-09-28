@@ -349,3 +349,30 @@ if __name__ == '__main__':
     start = torch.zeros((1, 1), dtype=torch.long)  # start with token 0
     generated = model.generate(start, max_new_tokens=50)
     print(f"Generated shape: {generated.shape}")
+
+def restore_config(ckpt):
+    """Rebuild the config a checkpoint was actually trained with.
+
+    The Jan 2026 checkpoints were trained at 256 dims, 8 heads, 6 layers (commit f20c6fc) but pickled
+    only vocab_size and block_size. The class defaults were later raised to 384 dims and 6 heads, so a
+    bare ckpt["config"] builds the wrong model. Width and depth are read from the weights; the head
+    count is the training-time value, which validation loss confirms (8 heads: 2.03, 4 heads: 3.08).
+    """
+    cfg = ckpt["config"]
+    sd = ckpt["model"]
+    saved = set(vars(cfg))
+    cfg.n_embd = sd["ln_f.weight"].shape[0]
+    cfg.n_layer = len({k.split(".")[1] for k in sd if k.startswith("blocks.")})
+    if "n_head" not in saved:
+        cfg.n_head = 8 if cfg.n_embd == 256 else 6
+    if "dropout" not in saved:
+        cfg.dropout = 0.1
+    if "bias" not in saved:
+        cfg.bias = False
+    return cfg
+
+
+# Checkpoints saved before this file moved into models/v0/ pickled Config under a top-level
+# module named "model". Registering the alias lets torch.load find it.
+import sys as _sys
+_sys.modules.setdefault("model", _sys.modules[__name__])

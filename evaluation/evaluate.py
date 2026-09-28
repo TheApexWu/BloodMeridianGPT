@@ -229,7 +229,7 @@ def generate_and_evaluate(checkpoint_path, num_samples=5, tokens_per_sample=500,
     """
     Load model, generate samples, and evaluate against McCarthy metrics.
     """
-    from models.v0.model import McCarthyGPT
+    from models.v0.model import McCarthyGPT, restore_config
     
     device = 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     print(f"Device: {device}")
@@ -237,7 +237,7 @@ def generate_and_evaluate(checkpoint_path, num_samples=5, tokens_per_sample=500,
     # Load checkpoint
     print(f"Loading checkpoint: {checkpoint_path}")
     ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
-    config = ckpt['config']
+    config = restore_config(ckpt)
     
     # Load meta from checkpoint or fallback to data/meta.pkl
     if 'meta' in ckpt:
@@ -298,7 +298,7 @@ def generate_and_evaluate(checkpoint_path, num_samples=5, tokens_per_sample=500,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Evaluate generated text against McCarthy metrics')
-    parser.add_argument('--checkpoint', type=str, default='checkpoints/best.pt',
+    parser.add_argument('--checkpoint', type=str, default='checkpoints/final_modal.pt',
                         help='Path to model checkpoint')
     parser.add_argument('--text', type=str, default=None,
                         help='Analyze provided text instead of generating')

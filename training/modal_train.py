@@ -186,7 +186,7 @@ def generate(model_code: str, prompt: str = "", tokens: int = 500, temperature: 
 def main():
     import os
     
-    base = os.path.dirname(os.path.abspath(__file__))
+    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
     print("=" * 60)
     print("McCarthyGPT Training on Modal (T4 GPU)")
