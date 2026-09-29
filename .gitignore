@@ -24,6 +24,7 @@ checkpoints/
 *.pt
 *.pth
 *.onnx
+!site/mccarthy.onnx
 
 # Dead files
 english_dictionary.txt
